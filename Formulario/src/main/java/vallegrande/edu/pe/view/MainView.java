@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import vallegrande.edu.pe.model.Producto;
@@ -21,16 +22,19 @@ public class MainView extends BorderPane {
     private Button btnProductos;
     private TableView<Producto> tablaProductos;
 
-    // --- NUEVOS CONTROLES PARA EL REGISTRO ---
+    // --- CONTROLES FORMULARIO Y CRUD ---
     private TextField txtNombre;
     private TextField txtCategoria;
     private TextField txtPrecio;
     private TextField txtStock;
     private Button btnRegistrar;
+    private Button btnEditar;
+    private Button btnEliminar;
+    private Button btnLimpiar;
 
     public MainView() {
         crearMenu();
-        crearFormulario(); // Inicializa los campos de texto
+        crearFormulario();
         crearTabla();
         mostrarInicio();
     }
@@ -59,7 +63,7 @@ public class MainView extends BorderPane {
         return boton;
     }
 
-    // --- MÉTODOS Y CONTROLES DEL FORMULARIO DE REGISTRO ---
+    // --- FORMULARIO Y BOTONES DE ACCIÓN ---
     private void crearFormulario() {
         txtNombre = new TextField();
         txtNombre.setPromptText("Nombre del producto");
@@ -74,6 +78,15 @@ public class MainView extends BorderPane {
         txtStock.setPromptText("Stock");
 
         btnRegistrar = new Button("Registrar");
+        btnEditar = new Button("Editar");
+        btnEliminar = new Button("Eliminar");
+        btnLimpiar = new Button("Limpiar");
+
+        // Estilos básicos para identificar los botones visualmente
+        btnRegistrar.setStyle("-fx-background-color: #16a34a; -fx-text-fill: white;");
+        btnEditar.setStyle("-fx-background-color: #ca8a04; -fx-text-fill: white;");
+        btnEliminar.setStyle("-fx-background-color: #dc2626; -fx-text-fill: white;");
+        btnLimpiar.setStyle("-fx-background-color: #6b7280; -fx-text-fill: white;");
     }
 
     public void mostrarInicio() {
@@ -96,14 +109,17 @@ public class MainView extends BorderPane {
         Label titulo = new Label("PRODUCTOS");
         titulo.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
 
-        // Agregamos el título, los 4 campos, el botón y la tabla en orden vertical
+        // Contenedor para alinear horizontalmente los botones del CRUD
+        HBox contenedorBotones = new HBox(10);
+        contenedorBotones.getChildren().addAll(btnRegistrar, btnEditar, btnEliminar, btnLimpiar);
+
         contenido.getChildren().addAll(
                 titulo,
                 txtNombre,
                 txtCategoria,
                 txtPrecio,
                 txtStock,
-                btnRegistrar,
+                contenedorBotones,
                 tablaProductos
         );
 
@@ -132,12 +148,13 @@ public class MainView extends BorderPane {
         tablaProductos.setItems(FXCollections.observableArrayList(productos));
     }
 
-    // --- MÉTODO PARA LIMPIAR LOS CAMPOS TRAS REGISTRAR ---
+    // --- MÉTODO PARA LIMPIAR CAMPOS ---
     public void limpiarCampos() {
         txtNombre.clear();
         txtCategoria.clear();
         txtPrecio.clear();
         txtStock.clear();
+        tablaProductos.getSelectionModel().clearSelection();
     }
 
     // --- GETTERS DE LOS CONTROLES Y BOTONES ---
@@ -148,4 +165,8 @@ public class MainView extends BorderPane {
     public TextField getTxtPrecio() { return txtPrecio; }
     public TextField getTxtStock() { return txtStock; }
     public Button getBtnRegistrar() { return btnRegistrar; }
+    public Button getBtnEditar() { return btnEditar; }
+    public Button getBtnEliminar() { return btnEliminar; }
+    public Button getBtnLimpiar() { return btnLimpiar; }
+    public TableView<Producto> getTablaProductos() { return tablaProductos; }
 }

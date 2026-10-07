@@ -35,7 +35,7 @@ public class ProductoDAO {
         return lista;
     }
 
-    // Método nuevo para insertar un producto
+    // Método para insertar un producto
     public boolean registrar(Producto p) {
         String sql = "INSERT INTO producto (nombre, categoria, precio, stock) VALUES (?, ?, ?, ?)";
 
@@ -52,6 +52,48 @@ public class ProductoDAO {
 
         } catch (Exception e) {
             System.err.println("--- ERROR AL REGISTRAR PRODUCTO EN NUTRILÁCTEOS ---");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método para actualizar / editar un producto por su ID
+    public boolean actualizar(Producto p) {
+        String sql = "UPDATE producto SET nombre = ?, categoria = ?, precio = ?, stock = ? WHERE id = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getCategoria());
+            ps.setDouble(3, p.getPrecio());
+            ps.setInt(4, p.getStock());
+            ps.setInt(5, p.getId());
+
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (Exception e) {
+            System.err.println("--- ERROR AL ACTUALIZAR PRODUCTO EN NUTRILÁCTEOS ---");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Método para eliminar un producto por su ID
+    public boolean eliminar(int id) {
+        String sql = "DELETE FROM producto WHERE id = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (Exception e) {
+            System.err.println("--- ERROR AL ELIMINAR PRODUCTO EN NUTRILÁCTEOS ---");
             e.printStackTrace();
             return false;
         }
